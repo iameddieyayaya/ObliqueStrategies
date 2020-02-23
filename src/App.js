@@ -42,19 +42,7 @@ function App() {
   return (
     <div style={style} className='App'>
       <animated.div style={props}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '415px',
-            height: '220px',
-            textAlign: 'center',
-            padding: '10px',
-            margin: '10px',
-            background: '#FFF',
-            borderRadius: '5%'
-          }}>
+        <div className='card'>
           <h3>{strategy}</h3>
         </div>
       </animated.div>
