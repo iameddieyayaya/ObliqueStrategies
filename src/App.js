@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
-import './App.css';
+import {edition1} from './strategies/edition-1'
+import {edition2} from './strategies/edition-2'
+import {edition3} from './strategies/edition-3'
+import {edition4} from './strategies/edition-4'
+import {edition5} from './strategies/edition-5'
 
-// import { ACCESS_KEY, SECRET_KEY } from './keys';
+import './App.css';
 
 function App() {
   const [background, setBackground] = useState();
@@ -25,20 +29,31 @@ function App() {
     alignItems: 'center'
   };
 
+  const editions = [
+    edition1,
+    edition2,
+    edition3,
+    edition4,
+    edition5,
+  ];
+
   useEffect(() => {
-    fetch('https://oblique-stragies-01.herokuapp.com/api/random')
-      .then(response => response.json())
-      .then(data => setStrategy(data.randomStrategy));
+    try {
+       const randomEditionIndex = Math.floor(Math.random() * editions.length);
+       const randomEdition = editions[randomEditionIndex];
+   
+       const randomStrategyIndex = Math.floor(Math.random() * randomEdition.strategies.length);
+       const randomStrategy = randomEdition.strategies[randomStrategyIndex];
+   
+       setStrategy(randomStrategy);
 
-    // fetch(`https://api.unsplash.com/photos/random/?client_id=${ACCESS_KEY}`)
-    //   .then(response => response.json())
-    //   .then(data => setBackground(data.urls.full));
-
-    fetch(`https://source.unsplash.com/featured/?texture,patterns`)
-      .then(response => response)
-      .then(data => setBackground(data.url));
+      fetch(`https://source.unsplash.com/featured/?texture,patterns`)
+        .then(response => response)
+        .then(data => setBackground(data.url));
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
-
   return (
     <div style={style} className='App'>
       <animated.div style={props}>
