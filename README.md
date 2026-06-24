@@ -6,7 +6,6 @@ Deployed at
 
 https://theobliquestrategies.netlify.app/
 
-Backend is deployed seperatly as an api on heroku.
-
+Backend API was orginally deployed on heroku free tier.
 
 ![GitHub Logo](/images/screenshot.png)
