@@ -1,69 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { useSpring, animated } from 'react-spring';
-import {edition1} from './strategies/edition-1'
-import {edition2} from './strategies/edition-2'
-import {edition3} from './strategies/edition-3'
-import {edition4} from './strategies/edition-4'
-import {edition5} from './strategies/edition-5'
+import React, { useState, useEffect } from "react";
+import { useSpring, animated } from "react-spring";
+import { edition1 } from "./strategies/edition-1";
+import { edition2 } from "./strategies/edition-2";
+import { edition3 } from "./strategies/edition-3";
+import { edition4 } from "./strategies/edition-4";
+import { edition5 } from "./strategies/edition-5";
 
-import './App.css';
+import "./App.css";
+
+const editions = [edition1, edition2, edition3, edition4, edition5];
 
 function App() {
-  const [background, setBackground] = useState();
-  const [strategy, setStrategy] = useState();
+  const [background, setBackground] = useState("");
+  const [strategy, setStrategy] = useState("");
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const randomEdition = editions[Math.floor(Math.random() * editions.length)];
+    const randomStrategy =
+      randomEdition.strategies[
+        Math.floor(Math.random() * randomEdition.strategies.length)
+      ];
+
+    const imageUrl = `https://picsum.photos/1600/900?random=${Date.now()}`;
+    const img = new Image();
+
+    img.onload = () => {
+      setStrategy(randomStrategy);
+      setBackground(imageUrl);
+      setIsReady(true);
+    };
+
+    img.onerror = () => {
+      setStrategy(randomStrategy);
+      setIsReady(true);
+    };
+
+    img.src = imageUrl;
+  }, []);
 
   const props = useSpring({
-    to: async (next, cancel) => {
-      await next({ opacity: 0, color: 'rgb(14,26,19)' });
-      await next({ opacity: 1, color: '#000' });
-    },
-    from: { opacity: 0, color: 'red' }
+    opacity: isReady ? 1 : 0,
+    transform: isReady ? "translateY(0px)" : "translateY(16px)",
+    config: { tension: 120, friction: 18 },
   });
 
   const style = {
-    backgroundImage: `url(${background})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundImage: background ? `url(${background})` : "none",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
-  const editions = [
-    edition1,
-    edition2,
-    edition3,
-    edition4,
-    edition5,
-  ];
-
-  useEffect(() => {
-    try {
-       const randomEditionIndex = Math.floor(Math.random() * editions.length);
-       const randomEdition = editions[randomEditionIndex];
-   
-       const randomStrategyIndex = Math.floor(Math.random() * randomEdition.strategies.length);
-       const randomStrategy = randomEdition.strategies[randomStrategyIndex];
-   
-       setStrategy(randomStrategy);
-
-       const API_URL ="https://picsum.photos/1600/900";
-
-      fetch(API_URL)
-        .then(response => response)
-        .then(data => setBackground(data.url));
-    } catch (error) {
-      console.log(error);
-    }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
-    <div style={style} className='App'>
-      <animated.div style={props}>
-        <div className='card'>
-          <h3>{strategy}</h3>
-        </div>
-      </animated.div>
+    <div style={style} className="App">
+      {!isReady && <div className="loader">Loading...</div>}
+
+      {isReady && (
+        <animated.div style={props}>
+          <div className="card">
+            <h3>{strategy}</h3>
+          </div>
+        </animated.div>
+      )}
     </div>
   );
 }
