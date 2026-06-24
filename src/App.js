@@ -47,7 +47,9 @@ function App() {
    
        setStrategy(randomStrategy);
 
-      fetch(`https://source.unsplash.com/featured/?texture,patterns`)
+       const API_URL ="https://picsum.photos/1600/900";
+
+      fetch(API_URL)
         .then(response => response)
         .then(data => setBackground(data.url));
     } catch (error) {
