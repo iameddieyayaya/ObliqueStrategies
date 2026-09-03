@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSpring, animated } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 import { edition1 } from "./strategies/edition-1";
 import { edition2 } from "./strategies/edition-2";
 import { edition3 } from "./strategies/edition-3";
